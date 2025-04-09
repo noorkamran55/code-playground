@@ -1,0 +1,79 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+    cout << "---------------------------------------------------" << endl;
+    
+    int totalmembers;
+    string members[100];
+    string months[12] = {"january", "february", "march", "april", "may", "june", 
+                         "july", "august", "september", "october", "november", "december"};
+                         
+    cout << "Enter total number of members: ";
+    cin >> totalmembers;
+    cout << "---------------------------------------------------" << endl;
+    
+    for (int i = 0; i < totalmembers; i++) {
+        cout << "Enter the member " << i + 1 << " name: ";
+        cin >> members[i];
+    }
+
+    srand(time(0));
+    cout << "---------------------------------------------------" << endl;
+    
+    bool assigned[100] = {false}; 
+    cout << "\nCommittee assignments:\n";
+
+    for (int i = 0; i < totalmembers; i++) {    
+        int randomcommittee;
+
+        cout << "*************************************************" << endl;    
+        do {
+            randomcommittee = (rand() % totalmembers) + 1;
+        } while (assigned[randomcommittee - 1]);
+
+        assigned[randomcommittee - 1] = true;
+        int randmonth = rand() % 12;
+
+        cout << members[i] << " is assigned to committee " << randomcommittee << " in " << months[randmonth] << endl;
+    }
+
+    // Asking for start month
+    string startMonth, endMonth;
+    int startIndex = -1, endIndex;
+    double amount;
+
+    cout << "\n***Please enter the name of the month in which the committee will start: ***\n";
+    cin >> startMonth;
+    
+    // Convert input to lowercase
+    transform(startMonth.begin(), startMonth.end(), startMonth.begin(), ::tolower);
+
+    cout << "\n**Please enter how much will each committee member pay: ";
+    cin >> amount;
+    
+    // Find the starting month index
+    for (int i = 0; i < 12; i++) {
+        if (months[i] == startMonth) {
+            startIndex = i;
+            break;
+        }
+    }
+    
+    if (startIndex == -1) {
+        cout << "Invalid month entered. Exiting program.\n";
+        return 1;
+    }
+
+    // Determine ending month
+    endIndex = (startIndex + totalmembers - 1) % 12;
+    endMonth = months[endIndex];
+
+    cout << "\nThe committee starts in " << startMonth << " and will end in " << endMonth << ".\n";
+
+    return 0;
+}
